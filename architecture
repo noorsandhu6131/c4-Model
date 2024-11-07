@@ -1,0 +1,46 @@
+workspace {
+
+    model {
+        user = person "user"
+        
+        SoftwareSystem = SoftwareSystem "Software System"{
+            
+            // define the database container
+            database = container "Database"{
+                //define relationship
+            }
+            // define the web application container
+            webapp = container "Web Application" {
+                // specify that the web application interacts with the
+                this -> database "reads from and writes to"
+                database -> this "sends data to and recieve data from"
+                
+            }
+            apiGateway = container "API gateway/load balancer" {
+                user -> this "uses"
+                //specify that the api gateway forwards represents to the web app
+                this -> webapp "forward reports to"
+                // specify that webapp sends the resonses back to api
+                webapp -> this "sends responses to"
+                
+                
+            }
+                
+            }
+        }
+        views {
+            systemContext = softwareSystem {
+                include *
+                autolayout lr
+                
+            }
+            // container diagram
+            container softwareSystem {
+                include 
+                *
+                autolayout lr
+            }
+            theme default
+        }
+        
+    }
